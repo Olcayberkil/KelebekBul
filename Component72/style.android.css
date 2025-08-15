@@ -1,0 +1,674 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: 'Montserrat', Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4f0f5 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    font-size: 1rem;
+}
+
+.component72 {
+    width: 100%;
+    background: white;
+    border-radius: 1.5625rem; 
+    overflow: hidden;
+    box-shadow: 0 1.25rem 3.125rem rgba(0, 119, 204, 0.2); 
+    position: relative;
+    margin: 1.25rem;
+    transform-style: preserve-3d;
+    perspective: 62.5rem; 
+}
+
+.header {
+    width: 100%;
+    background: linear-gradient(to right, #00B9F1, #0088cc);
+    padding: 4vh 2vw; 
+    text-align: center;
+    position: relative;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 25vh; 
+}
+
+.header::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.6vh; 
+    background: linear-gradient(to right, #ff3b30, #ff6b6b);
+}
+
+.title-container {
+    margin-bottom: 2vh;
+    text-align: center;
+    width: 100%;
+    position: relative;
+}
+
+.main-title {
+    font-size: 3.5vh; 
+    font-weight: 800;
+    margin-bottom: 0.5vh;
+    text-shadow: 0 0.2vh 0.4vh rgba(0,0,0,0.2);
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 1.8vh; 
+    font-weight: 500;
+    opacity: 0.9;
+    margin-top: 0.5vh;
+}
+
+.icon {
+    width: 11vh;
+    position: absolute;
+    bottom: 1vh; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem; 
+    padding: 1.25rem;
+    background: #f9f9f9;
+}
+
+.product-box {
+    aspect-ratio: 1/1;
+    background: white;
+    border-radius: 0.75rem; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.05); 
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.product-box:nth-child(2n+1) {
+    background-color: #00B9F1;
+}
+
+.product-box:hover {
+    transform: translateY(-0.3125rem); 
+    box-shadow: 0 0.5rem 0.9375rem rgba(0,0,0,0.1); 
+}
+
+.product-box img {
+    width: 100%;
+    height: 80%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.product-box.found {
+    background: linear-gradient(135deg, rgba(0,185,241,0.1) 0%, rgba(255,59,48,0.1) 100%);
+}
+
+
+.product-box.found::after {
+    content: "✓";
+    position: absolute;
+    top: 0.3125rem; 
+    right: 0.3125rem; 
+    width: 1.25rem; 
+    height: 1.25rem; 
+    background: #ff3b30;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem; 
+    font-weight: bold;
+}
+
+.product-box.wrong {
+    animation: shake 0.5s ease;
+    background-color: rgba(255, 59, 48, 0.1) !important;
+}
+/* Kelebek Animasyonları */
+.product-box .butterfly {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 40px;
+    height: 40px;
+    opacity: 0;
+    z-index: 10;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+.product-box.found .butterfly {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+/* Uçan Kelebekler */
+.flying-butterfly {
+    position: fixed;
+    z-index: 1001;
+    pointer-events: none;
+    animation: butterfly-fly linear forwards;
+    transform-origin: center;
+}
+/* Konfeti Partikülleri */
+.confetti-particle {
+    position: fixed;
+    z-index: 1000;
+    pointer-events: none;
+    animation: confetti-fall linear forwards;
+    transform-origin: center;
+}
+
+.confetti-particle.circle {
+    border-radius: 50%;
+}
+.confetti-particle.triangle {
+    width: 0;
+    height: 0;
+    background-color: transparent !important;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid currentColor;
+}
+
+
+@keyframes confetti-fall {
+    0% {
+        transform: 
+            translate(0, 0) 
+            rotate(var(--rotation, 0deg));
+        opacity: 1;
+    }
+    100% {
+        transform: 
+            translate(
+                calc(cos(var(--angle, 0)) * var(--velocity, 5) * 100px),
+                calc(sin(var(--angle, 0)) * var(--velocity, 5) * 100px + 100vh)
+            ) 
+            rotate(calc(var(--rotation, 0) + 720deg));
+        opacity: 0;
+    }
+}
+
+
+@keyframes butterfly-fly {
+    0% {
+        transform: 
+            translate(0, 0) 
+            rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: 
+            translate(
+                calc(var(--target-x) - var(--start-x, 0px)),
+                calc(var(--target-y) - var(--start-y, 0px))
+            ) 
+            rotate(var(--rotation, 0deg));
+        opacity: 0;
+    }
+}
+
+/* Footer */
+.footer {
+    padding: 1.25rem;
+    text-align: center;
+    background: white;
+    position: relative;
+}
+
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0.375rem; 
+    background: linear-gradient(to right, #ff3b30, #ff6b6b);
+}
+
+.logo {
+    max-width: 45.5rem; 
+    margin: 0.625rem auto; 
+}
+
+.campaign-info {
+    font-size: 0.6875rem; 
+    color: #888;
+    margin-top: 0.3125rem; 
+}
+
+.win-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    z-index: 1001;
+    background: linear-gradient(145deg, #ffffff, #f0f9ff);
+    border-radius: 1.5rem; 
+    padding: 2.5rem 1.875rem; 
+    width: 95%;
+    box-shadow: 0 0.9375rem 2.5rem rgba(0, 185, 241, 0.3); 
+    text-align: center;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 0.1875rem solid #00B9F1; 
+    overflow: hidden;
+}
+
+.win-message.active {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.win-message::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1.5rem; 
+    background: linear-gradient(90deg, #ff3b30, #00B9F1, #ffcc00);
+}
+
+.win-message::before,
+.win-message::after,
+.win-message .corner-top-left,
+.win-message .corner-bottom-left {
+    content: "";
+    position: absolute;
+    background-image: url('image/kelebek.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 10.25rem; 
+    height: 6.25rem; 
+    opacity: 0.12;
+}
+
+/* Sağ alt */
+.win-message::after {
+    bottom: -1.875rem;
+    right: -1.875rem;
+    transform: rotate(15deg);
+}
+
+.win-message::before {
+    top: -1.875rem; 
+    right: -1.875rem; 
+    transform: rotate(-15deg);
+}
+
+.win-message .corner-top-left {
+    top: -1.875rem; 
+    left: -1.875rem; 
+    transform: rotate(20deg);
+}
+
+
+.win-message .corner-bottom-left {
+    bottom: -1.875rem; 
+    left: -1.875rem;
+    transform: rotate(-20deg);
+}
+
+.win-message .butterfly-main {
+    width: 17rem; 
+    height: 9rem; 
+    margin: 0 auto 1.25rem; 
+    background-image: url('image/kelebek.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation: butterflyFloat 3s infinite ease-in-out;
+    position: relative;
+}
+
+.win-message .butterfly-main::before,
+.win-message .butterfly-main::after {
+    content: "";
+    position: absolute;
+    width: 3.09rem; 
+    height: 4.5rem; 
+    background-image: url('image/kelebek.png');
+    background-size: contain;
+    animation: butterflyFloat 2s infinite ease-in-out;
+}
+
+.win-message .butterfly-main::before {
+    left: -0.9375rem; 
+    opacity: 0.9;
+    transform: scale(0.6);
+    animation-delay: 0.3s;
+}
+
+.win-message .butterfly-main::after {
+    bottom: -0.9375rem; 
+    right: -0.9375rem; 
+    opacity: 0.7;
+    transform: scale(0.6);
+    animation-delay: 0.6s;
+}
+
+.win-message h2 {
+    color: #00B9F1;
+    font-size:4.5rem; 
+    margin-bottom: 0.625rem; 
+    font-weight: 800;
+    position: relative;
+    display: inline-block;
+}
+
+.win-message h2::after {
+    content: "";
+    position: absolute;
+    bottom: -0.5rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 7.125rem; 
+    height: 0.2875rem; 
+    background: linear-gradient(90deg, #ff3b30, #00B9F1);
+    border-radius: 0.1875rem; 
+}
+
+.win-message p {
+    color: #333;
+    font-size: 3.925rem; 
+    font-weight: 600;
+    margin-bottom: 1.5625rem; 
+    line-height: 1.4;
+}
+
+.win-message .prize-name {
+    display: inline-block;
+    background: linear-gradient(135deg, #00B9F1, #0077cc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 700;
+    padding: 0.125rem 0.5rem; 
+    border-radius: 0.25rem; 
+}
+
+.win-message .prize-image {
+    width: 22rem;  
+    height: 18rem; 
+    margin: 1.5rem auto;
+    border-radius: 1.5rem;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #00b9f1;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+.win-message .prize-image::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, transparent 100%);
+}
+
+.win-message .prize-image img {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+    animation: popIn 0.6s ease;
+}
+
+.win-message button {
+    background: linear-gradient(to right, #1a2e4d, #0a1a36);
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem; 
+    border-radius: 2rem; 
+    font-size: 2.525rem; 
+    font-weight: 700;
+    margin-top: 1.5rem; 
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0.3125rem 0.9375rem rgba(26, 46, 77, 0.3); 
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    position: relative;
+    overflow: hidden;
+}
+
+
+.win-message button::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 10%;
+    height: 20%;
+    background: linear-gradient(to right, transparent, rgba(8, 109, 168, 0.664), transparent);
+    transform: rotate(45deg);
+    transition: all 0.5s ease;
+}
+
+.win-message button:hover {
+    transform: translateY(-0.1875rem); 
+}
+
+.win-message button:hover::before {
+    transform: translateX(0.3125rem); 
+}
+.lose-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.lose-message.active {
+    opacity: 1;
+}
+
+.lose-message-content {
+    background: linear-gradient(135deg, #fff5f5, #ffebeb);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(255, 59, 48, 0.3);
+    border: 2px solid #ff3b30;
+    transform: scale(0.9);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.4);
+}
+
+.lose-message.active .lose-message-content {
+    transform: scale(2);
+    height: 350px;
+}
+
+.lose-message h2 {
+    color: #ff3b30;
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    margin-top: 2rem;
+}
+
+.lose-message p {
+    color: #555;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.lose-message button {
+    background: linear-gradient(to right, #ff3b30, #ff5e3a);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4);
+    transition: all 0.3s ease;
+}
+
+.lose-message button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(255, 59, 48, 0.5);
+}
+
+
+
+@keyframes flap-left {
+    0%, 100% { transform: rotate(20deg); }
+    50% { transform: rotate(-30deg); }
+}
+
+@keyframes flap-right {
+    0%, 100% { transform: rotate(-20deg); }
+    50% { transform: rotate(30deg); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+@keyframes butterflyFloat {
+    0%, 100% { 
+        transform: translateY(0) rotate(0deg); 
+    }
+    25% { 
+        transform: translateY(-8px) rotate(5deg); 
+    }
+    50% { 
+        transform: translateY(4px) rotate(-3deg); 
+    }
+    75% { 
+        transform: translateY(-5px) rotate(2deg); 
+    }
+}
+
+
+/* Küçük kelebekler için ek animasyon */
+@keyframes smallButterflyFloat {
+    0%, 100% { 
+        transform: translateY(0) rotate(0deg) scale(0.4); 
+    }
+    50% { 
+        transform: translateY(-10px) rotate(10deg) scale(0.7); 
+    }
+}
+@keyframes flutter {
+    0% {
+        transform: translateY(0) scale(1) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-5px) scale(1.1, 0.9) rotate(10deg);
+    }
+    50% {
+        transform: translateY(0px) scale(1, 1.1) rotate(-10deg);
+    }
+    75% {
+        transform: translateY(-4px) scale(1.1, 0.9) rotate(8deg);
+    }
+    100% {
+        transform: translateY(0) scale(1) rotate(0deg);
+    }
+}
+
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+/* Animations */
+@keyframes flutter {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(5deg); }
+}
+@keyframes fadeInScreen {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+/* Blur Effect */
+.blurred {
+    filter: blur(5px);
+    pointer-events: none;
+}
+
+/* Stok badge stili */
+.stock-badge {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+
